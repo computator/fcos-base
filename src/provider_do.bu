@@ -1,0 +1,10 @@
+variant: fcos
+version: 1.5.0
+ignition:
+  config:
+    merge:
+      - source: ${DIST_URL}base.ign
+passwd:
+  users:
+    - name: root
+      password_hash: ''
