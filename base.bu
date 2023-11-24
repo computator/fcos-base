@@ -1,0 +1,43 @@
+variant: fcos
+version: 1.5.0
+storage:
+  files:
+    - path: /etc/zincati/config.d/30-update-schedule.toml
+      contents:
+        inline: |
+          [updates]
+          strategy = "periodic"
+
+          [[updates.periodic.window]]
+          days = [ "Sun" ]
+          start_time = "02:00"
+          length_minutes = 60
+systemd:
+  units:
+    - name: podman.socket
+      enabled: true
+    - name: docker.service
+      enabled: false
+      mask: true
+    - name: docker.socket
+      enabled: false
+      mask: true
+    - name: remove-moby.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Remove moby-engine
+        # Run once for the machine
+        After=systemd-machine-id-commit.service
+        Before=zincati.service
+        ConditionPathExists=!/var/lib/%N.stamp
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStart=/usr/bin/rpm-ostree override remove moby-engine
+        ExecStart=/usr/bin/rpm-ostree ex apply-live --allow-replacement
+        ExecStartPost=/bin/touch /var/lib/%N.stamp
+
+        [Install]
+        WantedBy=default.target
