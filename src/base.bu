@@ -2,6 +2,25 @@ variant: fcos
 version: 1.5.0
 storage:
   files:
+#ifeq PROVIDER do
+    - path: /etc/containers/systemd/do-agent.container
+      contents:
+        inline: |
+          [Unit]
+          Description=DigitalOcean Agent Container
+
+          [Container]
+          Image=docker.io/digitalocean/do-agent:stable
+          AutoUpdate=registry
+          Volume=/proc:/host/proc:ro
+          Volume=/sys:/host/sys:ro
+
+          [Service]
+          Restart=on-failure
+
+          [Install]
+          WantedBy=default.target
+#endif
     - path: /etc/zincati/config.d/30-update-schedule.toml
       contents:
         inline: |
