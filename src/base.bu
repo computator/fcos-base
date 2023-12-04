@@ -1,11 +1,5 @@
 variant: fcos
 version: 1.5.0
-#ifeq PROVIDER do
-passwd:
-  users:
-    - name: root
-      password_hash: ''
-#endif
 storage:
   files:
     - path: /etc/zincati/config.d/30-update-schedule.toml
@@ -20,6 +14,15 @@ storage:
           length_minutes = 60
 systemd:
   units:
+#ifeq PROVIDER do
+    - name: getty@tty1.service
+      dropins:
+        - name: autologin-core.conf
+          contents: |
+            [Service]
+            ExecStart=
+            ExecStart=-/sbin/agetty -a core -o '-p -f -- \\u' --noclear - $TERM
+#endif
     - name: podman.socket
       enabled: true
     - name: docker.service
