@@ -1,5 +1,11 @@
 variant: fcos
 version: 1.5.0
+#ifeq PROVIDER do
+passwd:
+  users:
+    - name: root
+      password_hash: ''
+#endif
 storage:
   files:
     - path: /etc/zincati/config.d/30-update-schedule.toml
