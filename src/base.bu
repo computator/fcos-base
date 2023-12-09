@@ -11,9 +11,15 @@ storage:
 
           [Container]
           Image=docker.io/digitalocean/do-agent:stable
+          Exec=do-agent \\
+            --path.procfs /host/proc \\
+            --path.sysfs /host/sys \\
+            --path.rootfs /host/rootfs
           AutoUpdate=registry
+          Volume=/:/host/rootfs:ro,rslave
           Volume=/proc:/host/proc:ro
           Volume=/sys:/host/sys:ro
+          SecurityLabelDisable=true
 
           [Service]
           Restart=on-failure
