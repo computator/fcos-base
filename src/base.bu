@@ -46,7 +46,7 @@ systemd:
           contents: |
             [Service]
             ExecStart=
-            ExecStart=-/sbin/agetty -a core -o '-p -f -- \\u' --noclear - $TERM
+            ExecStart=-/sbin/agetty -a core -o '-p -f -- \\\\u' --noclear - $TERM
 #endif
     - name: podman.socket
       enabled: true
