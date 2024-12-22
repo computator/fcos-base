@@ -50,6 +50,8 @@ systemd:
 #endif
     - name: podman.socket
       enabled: true
+    - name: podman-auto-update.timer
+      enabled: true
     - name: docker.service
       enabled: false
       mask: true
